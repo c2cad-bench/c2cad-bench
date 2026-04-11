@@ -11,12 +11,19 @@ Every test case produces four scores on a 0–100 scale:
 | **Coverage (Cov)** | 20% | Did the model produce the right number of shapes? |
 | **Geometry (Geom)** | 30% | Are the shapes in the right places, of the right type, with correct dimensions? |
 | **Semantic (Sem)** | 50% | Does the assembly satisfy structural, physical, and family-specific constraints? |
-| **Global** | — | Weighted composite of the three above, with a structural validity gate |
+| **Global** | — | Weighted composite of the three above, with a structural validity gate and calibration |
 
-The global score formula before the validity gate is:
+The raw global score formula before the validity gate and calibration is:
 
 ```
 Global_raw = Cov × 0.20 + Geom × 0.30 + Sem × 0.50
+```
+
+The reported Global score applies the structural validity gate and then the
+implemented calibration curve:
+
+```
+Global = 100 * ((Global_raw * validity) / 100) ^ 1.3
 ```
 
 ---
@@ -77,16 +84,16 @@ if actual > expected × 1.5:
 
 ## Geometry Score (Geom)
 
-Geometry evaluates the spatial accuracy of each shape through nearest-neighbor matching against the golden reference. No matching IDs are required.
+Geometry evaluates the spatial accuracy of each shape through deterministic greedy one-to-one nearest-neighbor matching against the golden reference. No matching IDs are required.
 
 ### Matching
 
-For each golden shape, the best matching LLM shape is found by:
-1. Preferring shapes of the same type.
-2. Among same-type matches, choosing the nearest by 3D Euclidean distance.
-3. If no same-type match exists, falling back to the nearest shape of any type.
+For each golden shape, the best matching LLM shape is found in two passes:
+1. Pass 1 traverses golden shapes in reference order and assigns the nearest unused LLM shape of the same canonical type.
+2. Pass 2 revisits golden shapes that had no same-type partner and assigns the nearest unused LLM shape of any type.
+3. Each LLM shape can be used at most once. Output order and LLM-provided IDs are ignored.
 
-Each golden shape is matched to at most one LLM shape (greedy, no reuse).
+This is not a global Hungarian assignment; it is the scorer implemented in `src_latest/runners/run_unified.py`. The type-first pass prevents a pool of wrong-type shapes from stealing same-type matches, while the fallback pass still records type-substitution errors.
 
 ### Per-Shape Geometry Score
 
@@ -110,7 +117,7 @@ Wrong type receives zero credit. There is no partial credit for type mismatch.
 ```
 dim_score = 1.0 − mean(relative_errors)
 ```
-Dimension comparison is type-aware (cylinders compare radius and height, boxes compare sorted size triplets, beams compare length and direction, etc.). If the type does not match, dimension score is forced to 0.0 since comparing dimensions across different shape types is meaningless.
+Dimension comparison is type-aware (cylinders compare radius and height, boxes compare sorted size triplets, beams compare length, width, and endpoint-vector direction, pipes compare inner/outer radius and height, cones compare base/top radius and height, and tori compare ring/tube radii). If the type does not match, dimension score is forced to 0.0 since comparing dimensions across different shape types is meaningless.
 
 **Combined per-shape geometry:**
 ```
@@ -190,7 +197,7 @@ Sem = normalized_sem × coverage_gate × geom_gate × 100
 
 ## Global Score
 
-The global score is a weighted composite with a structural validity gate.
+The global score is a weighted composite with a structural validity gate and final calibration curve.
 
 ### Weighted Composite
 
@@ -207,7 +214,7 @@ if Geom < 5%:    validity = 0.0
 if 5% ≤ Geom < 15%:  validity = (Geom − 5%) / 10%
 if Geom ≥ 15%:   validity = 1.0
 
-Global = Global_raw × validity
+Global_gated = Global_raw × validity
 ```
 
 | Geometry | Validity Gate | Effect |
@@ -219,6 +226,16 @@ Global = Global_raw × validity
 | 10% | 0.5 | Global halved |
 | 15% | 1.0 | No penalty |
 | 50% | 1.0 | No penalty |
+
+### Calibration Curve
+
+The implementation reports a calibrated Global score:
+
+```
+Global = 100 * (Global_gated / 100) ^ 1.3
+```
+
+This monotonic curve preserves model ordering for a fixed raw score comparison while compressing partially correct assemblies. All paper tables and figures use the calibrated value written to `score_global`.
 
 ---
 
@@ -250,13 +267,13 @@ Degenerate shapes are filtered out before scoring. Effective output is empty.
 
 ### Model produces 10× more shapes than expected
 ```
-Cov=11  Geom=100  Sem=80  Global=72 (approximately)
+Cov=11  Geom=100  Sem=80  Global=66 (approximately, after calibration)
 ```
 Even if the correct shapes exist within the excess, the hallucination penalty crushes coverage. The model is penalized for not understanding the assembly specification.
 
 ### Model produces 1 correct shape out of 3 expected
 ```
-Cov=33  Geom=33  Sem≈15  Global≈24
+Cov=33  Geom=33  Sem≈15  Global≈16
 ```
 Partial credit is fair but harsh. The steep coverage gate (1.5 exponent) reduces semantic substantially.
 
@@ -402,7 +419,7 @@ showcase_golden.json          showcase_llm.json
               └───────┬────────┘
                       │
               ┌───────▼────────┐
-              │  Global        │  weighted sum → structural validity gate
+              │  Global        │  weighted sum → validity gate → calibration
               └───────┴────────┘
                       │
               score_cov / score_geom / score_sem / score_global

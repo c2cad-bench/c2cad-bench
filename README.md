@@ -131,19 +131,6 @@ C2CAD-Bench/
   LICENSE                   Release license
 ```
 
-## Submission Artifact Notes
-
-The review artifact intentionally excludes private and generated-local files:
-
-- `.env`
-- `.git/`
-- `__pycache__/`
-- `.DS_Store`
-- stale paper builds and duplicate manuscript sources
-- notebook checkpoints and editor temporary files
-
-For an anonymous review repository, do not add author names, institution names, personal GitHub handles, private API keys, or commit history that identifies the authors.
-
 ## License
 
 The code and data are released under the MIT License. For an anonymous review artifact, restore author-identifying copyright metadata only after the review period or for the camera-ready public release.

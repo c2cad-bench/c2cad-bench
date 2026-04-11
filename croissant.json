@@ -1,0 +1,395 @@
+{
+  "@context": {
+    "@language": "en",
+    "@vocab": "https://schema.org/",
+    "citeAs": "cr:citeAs",
+    "column": "cr:column",
+    "conformsTo": "dct:conformsTo",
+    "cr": "http://mlcommons.org/croissant/",
+    "data": {
+      "@id": "cr:data",
+      "@type": "@json"
+    },
+    "dataType": {
+      "@id": "cr:dataType",
+      "@type": "@vocab"
+    },
+    "dct": "http://purl.org/dc/terms/",
+    "examples": {
+      "@id": "cr:examples",
+      "@type": "@json"
+    },
+    "extract": "cr:extract",
+    "field": "cr:field",
+    "fileObject": "cr:fileObject",
+    "fileProperty": "cr:fileProperty",
+    "fileSet": "cr:fileSet",
+    "format": "cr:format",
+    "includes": "cr:includes",
+    "isLiveDataset": "cr:isLiveDataset",
+    "jsonPath": "cr:jsonPath",
+    "key": "cr:key",
+    "md5": "cr:md5",
+    "parentField": "cr:parentField",
+    "path": "cr:path",
+    "rai": "cr:rai",
+    "recordSet": "cr:recordSet",
+    "references": "cr:references",
+    "regex": "cr:regex",
+    "repeated": "cr:repeated",
+    "replace": "cr:replace",
+    "samplingRate": "cr:samplingRate",
+    "sc": "https://schema.org/",
+    "separator": "cr:separator",
+    "source": "cr:source",
+    "subField": "cr:subField",
+    "transform": "cr:transform"
+  },
+  "@type": "sc:Dataset",
+  "name": "C2CAD-Bench",
+  "description": "A benchmark dataset for evaluating language-agnostic 3D spatial reasoning in large language models. The dataset contains natural-language CAD-style prompts, deterministic golden JSON references, model JSON outputs, and per-case scores for 25 test families, 75 test cases, and 13 evaluated LLMs.",
+  "conformsTo": "http://mlcommons.org/croissant/1.0",
+  "license": "https://spdx.org/licenses/MIT.html",
+  "url": "https://github.com/neurips2026submission-alt/c2cad-bench-artifact",
+  "creator": [
+    {
+      "@type": "Organization",
+      "name": "Anonymous Authors"
+    }
+  ],
+  "datePublished": "2026-04-11",
+  "version": "1.0",
+  "keywords": [
+    "3D spatial reasoning",
+    "CAD",
+    "large language models",
+    "benchmark",
+    "evaluation"
+  ],
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "cases_jsonl",
+      "name": "data/cases.jsonl",
+      "description": "Benchmark prompts and golden references.",
+      "contentUrl": "https://raw.githubusercontent.com/neurips2026submission-alt/c2cad-bench-artifact/main/data/cases.jsonl",
+      "encodingFormat": "application/jsonl",
+      "md5": "72ec8282edbd7220eacd1155df8eaa08"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "model_outputs_jsonl",
+      "name": "data/model_outputs.jsonl",
+      "description": "Model outputs and per-case scores.",
+      "contentUrl": "https://raw.githubusercontent.com/neurips2026submission-alt/c2cad-bench-artifact/main/data/model_outputs.jsonl",
+      "encodingFormat": "application/jsonl",
+      "md5": "7ab09a957ffc6294046d9a95614be062"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "scores_csv",
+      "name": "data/scores.csv",
+      "description": "Tabular per-case score table.",
+      "contentUrl": "https://raw.githubusercontent.com/neurips2026submission-alt/c2cad-bench-artifact/main/data/scores.csv",
+      "encodingFormat": "text/csv",
+      "md5": "ffc09accac7d3b32cc86a0cc58438bc7"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "model_summary_csv",
+      "name": "data/model_summary.csv",
+      "description": "Aggregate model-level score summary.",
+      "contentUrl": "https://raw.githubusercontent.com/neurips2026submission-alt/c2cad-bench-artifact/main/data/model_summary.csv",
+      "encodingFormat": "text/csv",
+      "md5": "4076fc9beaa9302f766139cd527d749d"
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "showcase_db_js",
+      "name": "results/showcase_db.js",
+      "description": "Original self-contained result database used by the viewer.",
+      "contentUrl": "https://raw.githubusercontent.com/neurips2026submission-alt/c2cad-bench-artifact/main/results/showcase_db.js",
+      "encodingFormat": "application/javascript",
+      "md5": "c7a62159e97efe207614e6a26155e7ec"
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "cases",
+      "name": "cases",
+      "description": "The 75 benchmark cases, including prompts and golden references.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "cases/case_id",
+          "name": "case_id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "cases_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.case_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "cases/family",
+          "name": "family",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "cases_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.family"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "cases/phase",
+          "name": "phase",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "cases_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.phase"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "cases/difficulty_id",
+          "name": "difficulty_id",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "cases_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.difficulty_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "cases/difficulty_label",
+          "name": "difficulty_label",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "cases_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.difficulty_label"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "cases/expected_shape_count",
+          "name": "expected_shape_count",
+          "dataType": "sc:Integer",
+          "source": {
+            "fileObject": {
+              "@id": "cases_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.expected_shape_count"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "cases/prompt",
+          "name": "prompt",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "cases_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.prompt"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "cases/golden_shapes_json",
+          "name": "golden_shapes_json",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "cases_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.golden_shapes_json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "model_outputs",
+      "name": "model_outputs",
+      "description": "Model outputs and scores for each model-case pair.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "model_outputs/case_id",
+          "name": "case_id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "model_outputs_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.case_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "model_outputs/model_id",
+          "name": "model_id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "model_outputs_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.model_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "model_outputs/score_cov",
+          "name": "score_cov",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "model_outputs_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.score_cov"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "model_outputs/score_geom",
+          "name": "score_geom",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "model_outputs_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.score_geom"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "model_outputs/score_sem",
+          "name": "score_sem",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "model_outputs_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.score_sem"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "model_outputs/score_global",
+          "name": "score_global",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "model_outputs_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.score_global"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "model_outputs/output_shapes_json",
+          "name": "output_shapes_json",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "model_outputs_jsonl"
+            },
+            "extract": {
+              "jsonPath": "$.output_shapes_json"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "@type": "cr:RecordSet",
+      "@id": "scores",
+      "name": "scores",
+      "description": "CSV table of per-case scores.",
+      "field": [
+        {
+          "@type": "cr:Field",
+          "@id": "scores/case_id",
+          "name": "case_id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "scores_csv"
+            },
+            "extract": {
+              "column": "case_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "scores/model_id",
+          "name": "model_id",
+          "dataType": "sc:Text",
+          "source": {
+            "fileObject": {
+              "@id": "scores_csv"
+            },
+            "extract": {
+              "column": "model_id"
+            }
+          }
+        },
+        {
+          "@type": "cr:Field",
+          "@id": "scores/score_global",
+          "name": "score_global",
+          "dataType": "sc:Float",
+          "source": {
+            "fileObject": {
+              "@id": "scores_csv"
+            },
+            "extract": {
+              "column": "score_global"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "citeAs": "https://github.com/neurips2026submission-alt/c2cad-bench-artifact"
+}

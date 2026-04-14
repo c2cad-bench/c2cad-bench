@@ -12,8 +12,16 @@ C2CAD-Bench evaluates the ability of Large Language Models (LLMs) to reason abou
 
 - **75 Test Cases**: Spanning 25 test families across 3 difficulty levels.
 - **13 LLMs Evaluated**: Benchmark results for major frontier models (Gemini, GPT, Claude, DeepSeek).
-- **Multimodal Scoring**: Automated evaluation using **Coverage**, **Geometry**, and **Semantic** scores.
+- **Multimodal Scoring**: Automated evaluation using **Coverage (20%)**, **Geometry (30%)**, and **Semantic (50%)** scores.
 - **Parametric Golden References**: Every case is compared against deterministic ground truth.
+
+---
+
+## 📈 Metric Decomposition
+
+Our scoring methodology accounts for shape count (Coverage), dimensional accuracy (Geometry), and functional/structural validity (Semantic). The chart below shows the decomposition across frontier models.
+
+![Score Components](results/fig2_score_components.png)
 
 ---
 
@@ -25,7 +33,30 @@ The following table showcases how different LLMs handle various structural and e
 | :--- | :--- |
 | **Spiral Staircase**<br>(Phase 1: Geometric Forms)<br><br>Tests trigonometry, repetition, and bolt-circle patterns. | ![Spiral Staircase Comparison](results/fig17_spiral_staircase_comparison.png) |
 | **Radiolarian Skeleton**<br>(Phase 4: Bio-Inspired)<br><br>Tests biological morphology, geodesic frames, and large-scale recursive patterns. | ![Radiolarian Comparison](results/fig21_radiolarian_skeleton_comparison.png) |
-| **Pipe Manifold**<br>(Phase 3: Engineering)<br><br>Tests concentricity, clearance, and mechanism layout under gravity mates. | *The Pipe Manifold challenge requires models to align multiple ports and support structures with strict dimensional constraints.*<br>[See Phase 3 Results](#) |
+| **Pipe Manifold**<br>(Phase 3: Engineering)<br><br>Tests concentricity, clearance, and mechanism layout under gravity mates. | *The Pipe Manifold challenge requires models to align multiple ports and support structures with strict dimensional constraints.*<br>[View results for Pipe Manifold in Heatmap ↓](#-full-model-family-score-matrix) |
+| **Voxel Grid & DNA Helix**<br>(Phases 1 & 2)<br><br>Tests volumetric filling and parametric double-helix path generation. | *Frontier models like Gemini 3.1 Pro and GPT-5.4 consistently achieve 100% coverage on these complex parametric tasks.*<br>[View Detailed Matrix ↓](#-full-model-family-score-matrix) |
+
+---
+
+## 📊 Full Model-Family Score Matrix
+
+The heatmap below shows the global score for every model across all 25 test families. This provides a granular view of where models excel (e.g., standard geometric forms) and where they struggle (e.g., complex engineering assemblies like the Pipe Manifold).
+
+![Family Heatmap](results/fig3_family_heatmap.png)
+
+---
+
+## 📈 Robustness & Scaling Analysis
+
+### Performance vs. Difficulty
+As difficulty increases from Level 1 to Level 3, we observe a characteristic "performance cliff" even for frontier models. This analysis breaks down how coverage, geometry, and semantic logic degrade under pressure.
+
+![Difficulty Scaling](results/fig5_difficulty_scaling.png)
+
+### Shape Hallucination Analysis
+We track "hallucinations" (producing significantly more shapes than specified) and "under-production" (ignoring core structural components). This chart illustrates the production ratio accuracy across all tested models.
+
+![Hallucination Analysis](results/fig13_hallucination_analysis.png)
 
 ---
 

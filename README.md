@@ -1,38 +1,58 @@
-# C2CAD-Bench
+# 🏗️ C2CAD-Bench
 
-C2CAD-Bench is a benchmark for evaluating 3D spatial reasoning in large language models for CAD-style geometry generation. Models receive natural-language engineering specifications and return JSON arrays of geometric primitives. The scorer compares the output against deterministic parametric golden references using coverage, geometry, and semantic scores.
+**A Large-Scale Benchmark for 3D Spatial Reasoning and CAD Geometry Generation.**
 
-This repository contains the code and data artifact for the paper submission. The evaluated benchmark version contains 25 test families, 3 difficulty levels per family, 75 total test cases, and results for 13 LLMs.
+![Overall Rankings](results/fig1_overall_rankings.png)
 
-## What Is Included
+C2CAD-Bench evaluates the ability of Large Language Models (LLMs) to reason about 3D space and generate valid CAD-style geometry. Unlike simplified benchmarks, C2CAD-Bench requires models to translate complex natural-language engineering specifications into deterministic parametric primitives.
 
-- Prompt definitions and deterministic golden-reference generators.
-- The unified benchmark runner and scoring pipeline.
-- Semantic validators for family-specific constraints.
-- A WebGL viewer and static result database for inspecting outputs.
-- Raw model outputs and per-case scores in `results/showcase_db.js`.
-- Documentation for scoring and zero-scaffolding prompt design.
+---
 
-## Benchmark Summary
+## 🌟 Key Highlights
 
-| Phase | Families | Main challenge |
-| --- | ---: | --- |
-| P1: Geometric Forms | 6 | Trigonometry, repetition, bolt-circle patterns |
-| P2: Complex Structures | 6 | Hidden formula derivation, lattice connectivity, pitch-circle constraints |
-| P3: Engineering Constraints | 6 | Concentricity, clearance, gravity mates, mechanism layout |
-| P4: Bio-Inspired Assemblies | 7 | Biological morphology, large-scale patterns, geodesic frames |
+- **75 Test Cases**: Spanning 25 test families across 3 difficulty levels.
+- **13 LLMs Evaluated**: Benchmark results for major frontier models (Gemini, GPT, Claude, DeepSeek).
+- **Multimodal Scoring**: Automated evaluation using **Coverage**, **Geometry**, and **Semantic** scores.
+- **Parametric Golden References**: Every case is compared against deterministic ground truth.
 
-The JSON schema uses seven primitive types:
+---
 
-```text
-box, cylinder, sphere, cone, torus, pipe, beam
-```
+## 🖼️ Showcase Gallery: Model Performance
 
-All dimensions are in millimetres. The expected primitive count ranges from 5 to 805 shapes.
+The following table showcases how different LLMs handle various structural and engineering challenges. Notice the varying degrees of "hallucination" and spatial detachment.
 
-## Fresh Environment Setup
+| Challenge | Comparison & Results |
+| :--- | :--- |
+| **Spiral Staircase**<br>(Phase 1: Geometric Forms)<br><br>Tests trigonometry, repetition, and bolt-circle patterns. | ![Spiral Staircase Comparison](results/fig17_spiral_staircase_comparison.png) |
+| **Radiolarian Skeleton**<br>(Phase 4: Bio-Inspired)<br><br>Tests biological morphology, geodesic frames, and large-scale recursive patterns. | ![Radiolarian Comparison](results/fig21_radiolarian_skeleton_comparison.png) |
+| **Pipe Manifold**<br>(Phase 3: Engineering)<br><br>Tests concentricity, clearance, and mechanism layout under gravity mates. | *The Pipe Manifold challenge requires models to align multiple ports and support structures with strict dimensional constraints.*<br>[See Phase 3 Results](#) |
 
-Use Python 3.10 or newer.
+---
+
+## 🧠 Cognitive Capacity Profiles
+
+We use radar charts to visualize the performance profiles across different reasoning dimensions. This highlights the "hallucination finger-print" of different model families.
+
+![Cognitive Profiles](results/fig19_cognitive_capacity_profiles.png)
+
+---
+
+## 🛤️ Benchmark Phases
+
+C2CAD-Bench is divided into four distinct phases of increasing complexity:
+
+- **🟦 Phase 1: Geometric Forms**: Basic primitive grouping, bolt patterns, and simple rotations.
+- **🟪 Phase 2: Complex Structures**: Lattice connectivity, formula derivation, and pitch-circle constraints.
+- **🟧 Phase 3: Engineering Constraints**: Concentricity, clearance, and gravity-mated assemblies (e.g., **Pipe Manifold**).
+- **🟩 Phase 4: Bio-Inspired Assemblies**: Biological morphology and geodesic frames.
+
+---
+
+## 🚀 Quick Start
+
+### 📦 Setup
+
+Requires Python 3.10+.
 
 ```bash
 python -m venv .venv
@@ -41,96 +61,45 @@ python -m venv .venv
 # macOS/Linux:
 source .venv/bin/activate
 
-python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-## Dry Checks
+### 🔍 Dry Checks
 
-These commands do not call any model API:
+Verify your environment without calling APIs:
 
 ```bash
 python runners\run_unified.py --list-models
-python -m compileall -q probe runners stages
 python runners\check_artifact.py
 ```
 
-Expected output:
+### ⚡ Running Live Evaluations
 
-```text
-75 golden test cases
-13 models
-975 model-case results
-```
-
-## Running Live Evaluations
-
-Live evaluation requires provider API keys. Copy the example environment file and fill only the providers you intend to use:
+Copy the example environment file and add your API keys:
 
 ```bash
 cp .env.example .env
-```
-
-Required variables by provider:
-
-| Provider | Environment variable |
-| --- | --- |
-| Google Gemini | `GOOGLE_API_KEY` or `GEMINI_API_KEY` |
-| OpenAI | `OPENAI_API_KEY` |
-| Anthropic | `ANTHROPIC_API_KEY` |
-| DeepSeek | `DEEPSEEK_API_KEY` |
-| Moonshot/Kimi | `MOONSHOT_API_KEY` |
-
-Run a single model:
-
-```bash
+# Run a specific model
 python runners\run_unified.py --all --model gemini-2.5-pro
 ```
 
-Run a single phase:
+---
 
-```bash
-python runners\run_unified.py --phase 1 --model gpt-4.1
-```
-
-Re-run failed or zero-score cases:
-
-```bash
-python runners\run_unified.py --all --model claude-sonnet-4-6 --redo
-```
-
-## Viewing Results
-
-Open the static dashboard and visualizer in a browser:
-
-```bash
-ui\results.html
-ui\visualizer.html
-```
-
-On macOS/Linux:
-
-```bash
-open ui/results.html
-open ui/visualizer.html
-```
-
-## Repository Structure
+## 📂 Repository Structure
 
 ```text
 C2CAD-Bench/
-  probe/                    Core package and schema helpers
-  runners/                  Benchmark runner, scoring utilities, database builders
-  stages/                   Golden-reference generators by phase
-  results/                  Result database and analysis figures
-  ui/                       Static dashboard and 3D visualizer
-  SCORING_RULES.md          Scoring methodology
-  prompt_design_rules.md    Zero-scaffolding prompt design rules
-  requirements.txt          Python dependencies
-  .env.example              API-key template
-  LICENSE                   Release license
+├── probe/          # Core package and schema helpers
+├── runners/        # Benchmark runner & scoring utilities
+├── stages/         # Golden-reference generators by phase
+├── results/        # Generated figures and result database
+├── ui/             # WebGL visualizer and static dashboard
+├── SCORING_RULES.md
+└── requirements.txt
 ```
 
-## License
+---
 
-The code and data are released under the MIT License. For an anonymous review artifact, restore author-identifying copyright metadata only after the review period or for the camera-ready public release.
+## ⚖️ License
+
+Released under the **MIT License**. For anonymous review artifacts, please respect the metadata constraints specified in the paper.

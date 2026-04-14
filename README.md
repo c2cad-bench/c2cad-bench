@@ -1,89 +1,89 @@
-# 🏗️ C2CAD-Bench
+# C2CAD-Bench
 
 **A Large-Scale Benchmark for 3D Spatial Reasoning and CAD Geometry Generation.**
 
 ![Overall Rankings](results/fig1_overall_rankings.png)
 
-C2CAD-Bench evaluates the ability of Large Language Models (LLMs) to reason about 3D space and generate valid CAD-style geometry. Unlike simplified benchmarks, C2CAD-Bench requires models to translate complex natural-language engineering specifications into deterministic parametric primitives.
+C2CAD-Bench evaluates the multi-step spatial reasoning capabilities of Large Language Models (LLMs) in generating deterministic CAD geometry. The benchmark requires models to map high-level engineering specifications to precise parametric primitives.
 
 ---
 
-## 🌟 Key Highlights
+## Technical Highlights
 
-- **75 Test Cases**: Spanning 25 test families across 3 difficulty levels.
-- **13 LLMs Evaluated**: Benchmark results for major frontier models (Gemini, GPT, Claude, DeepSeek).
-- **Multimodal Scoring**: Automated evaluation using **Coverage (20%)**, **Geometry (30%)**, and **Semantic (50%)** scores.
-- **Parametric Golden References**: Every case is compared against deterministic ground truth.
+- **75 Test Cases**: Spanning 25 distinct test families across three complexity levels.
+- **13 Frontier LLMs**: Comparative evaluation of state-of-the-art models including Gemini, GPT, Claude, and DeepSeek.
+- **Multi-Dimensional Scoring**: Automated evaluation pipeline covering **Coverage (20%)**, **Geometry (30%)**, and **Semantic Validation (50%)**.
+- **Parametric Ground Truth**: Every case is evaluated against deterministic golden-reference geometry.
 
 ---
 
-## 📈 Metric Decomposition
+## Metric Decomposition
 
-Our scoring methodology accounts for shape count (Coverage), dimensional accuracy (Geometry), and functional/structural validity (Semantic). The chart below shows the decomposition across frontier models.
+The scoring methodology prioritizes structural and functional validity over mere shape production. The following decomposition illustrates model performance across the three primary scoring dimensions.
 
 ![Score Components](results/fig2_score_components.png)
 
 ---
 
-## 🖼️ Showcase Gallery: Model Performance
+## Showcase Gallery: Model Performance
 
-The following table showcases how different LLMs handle various structural and engineering challenges. Notice the varying degrees of "hallucination" and spatial detachment.
+The following table demonstrates model performance across various geometric and engineering tasks, highlighting the diversity in spatial grounding and hallucination profiles.
 
-| Challenge | Comparison & Results |
+| Challenge | Overview and Results |
 | :--- | :--- |
-| **Spiral Staircase**<br>(Phase 1: Geometric Forms)<br><br>Tests trigonometry, repetition, and bolt-circle patterns. | ![Spiral Staircase Comparison](results/fig17_spiral_staircase_comparison.png) |
-| **Radiolarian Skeleton**<br>(Phase 4: Bio-Inspired)<br><br>Tests biological morphology, geodesic frames, and large-scale recursive patterns. | ![Radiolarian Comparison](results/fig21_radiolarian_skeleton_comparison.png) |
-| **Pipe Manifold**<br>(Phase 3: Engineering)<br><br>Tests concentricity, clearance, and mechanism layout under gravity mates. | *The Pipe Manifold challenge requires models to align multiple ports and support structures with strict dimensional constraints.*<br>[View results for Pipe Manifold in Heatmap ↓](#-full-model-family-score-matrix) |
-| **Voxel Grid & DNA Helix**<br>(Phases 1 & 2)<br><br>Tests volumetric filling and parametric double-helix path generation. | *Frontier models like Gemini 3.1 Pro and GPT-5.4 consistently achieve 100% coverage on these complex parametric tasks.*<br>[View Detailed Matrix ↓](#-full-model-family-score-matrix) |
+| **Spiral Staircase**<br>(Phase 1: Basic Geometric Forms)<br><br>Tests trigonometric accuracy and polar pattern repetition. | ![Spiral Staircase Comparison](results/fig17_spiral_staircase_comparison.png) |
+| **Radiolarian Skeleton**<br>(Phase 4: Bio-Inspired Assemblies)<br><br>Tests high-order recursive patterns and geodesic frame generation. | ![Radiolarian Comparison](results/fig21_radiolarian_skeleton_comparison.png) |
+| **Pipe Manifold**<br>(Phase 3: Engineering Constraints)<br><br>Tests concentricity, clearance, and gravity-mated assembly constraints. | *The Pipe Manifold challenge requires precise alignment of ports and support structures.*<br>[View Pipe Manifold results in Heatmap ↓](#model-family-performance-matrix) |
+| **Voxel Grid & DNA Helix**<br>(Phases 1 & 2)<br><br>Tests volumetric filling and parametric double-helix pathing. | *Frontier models consistently achieve maximum coverage on these foundational parametric tasks.*<br>[View Detailed Matrix ↓](#model-family-performance-matrix) |
 
 ---
 
-## 📊 Full Model-Family Score Matrix
+## Model-Family Performance Matrix
 
-The heatmap below shows the global score for every model across all 25 test families. This provides a granular view of where models excel (e.g., standard geometric forms) and where they struggle (e.g., complex engineering assemblies like the Pipe Manifold).
+The heatmap below provides a comprehensive overview of global scores across all 25 test families. This matrix reveals specific model strengths and failure modes in complex engineering scenarios.
 
 ![Family Heatmap](results/fig3_family_heatmap.png)
 
 ---
 
-## 📈 Robustness & Scaling Analysis
+## Robustness and Scaling Analysis
 
-### Performance vs. Difficulty
-As difficulty increases from Level 1 to Level 3, we observe a characteristic "performance cliff" even for frontier models. This analysis breaks down how coverage, geometry, and semantic logic degrade under pressure.
+### Performance Scaling across Complexity Levels
+As task complexity increases from Level 1 to Level 3, most models exhibit significant performance degradation. This analysis breaks down the robustness of coverage, geometry, and semantic logic.
 
 ![Difficulty Scaling](results/fig5_difficulty_scaling.png)
 
-### Shape Hallucination Analysis
-We track "hallucinations" (producing significantly more shapes than specified) and "under-production" (ignoring core structural components). This chart illustrates the production ratio accuracy across all tested models.
+### Shape Hallucination and Production Accuracy
+We track production ratios to identify "shape hallucinations" (excessive geometry) vs. "under-production" (partial structural failures).
 
 ![Hallucination Analysis](results/fig13_hallucination_analysis.png)
 
 ---
 
-## 🧠 Cognitive Capacity Profiles
+## Cognitive Capacity Profiles
 
-We use radar charts to visualize the performance profiles across different reasoning dimensions. This highlights the "hallucination finger-print" of different model families.
+Radar profiles visualize model capability across different reasoning dimensions, providing a "spatial signature" for each model family.
 
 ![Cognitive Profiles](results/fig19_cognitive_capacity_profiles.png)
 
 ---
 
-## 🛤️ Benchmark Phases
+## Benchmark Phases
 
-C2CAD-Bench is divided into four distinct phases of increasing complexity:
+C2CAD-Bench is structured into four phases of increasing dimensionality and constraint complexity:
 
-- **🟦 Phase 1: Geometric Forms**: Basic primitive grouping, bolt patterns, and simple rotations.
-- **🟪 Phase 2: Complex Structures**: Lattice connectivity, formula derivation, and pitch-circle constraints.
-- **🟧 Phase 3: Engineering Constraints**: Concentricity, clearance, and gravity-mated assemblies (e.g., **Pipe Manifold**).
-- **🟩 Phase 4: Bio-Inspired Assemblies**: Biological morphology and geodesic frames.
+- **Phase 1: Geometric Forms**: Primitives, bolt patterns, and basic rotations.
+- **Phase 2: Complex Structures**: Lattices, pitch-circle constraints, and formula derivation.
+- **Phase 3: Engineering Constraints**: Concentricity, clearance, and gravity-mated assemblies.
+- **Phase 4: Bio-Inspired Assemblies**: Biological morphology and recursive geodesic frames.
 
 ---
 
-## 🚀 Quick Start
+## Getting Started
 
-### 📦 Setup
+### Environment Setup
 
-Requires Python 3.10+.
+Python 3.10+ is required.
 
 ```bash
 python -m venv .venv
@@ -95,42 +95,41 @@ source .venv/bin/activate
 python -m pip install -r requirements.txt
 ```
 
-### 🔍 Dry Checks
+### Verification Checks
 
-Verify your environment without calling APIs:
+To verify the installation and data artifact without API usage:
 
 ```bash
 python runners\run_unified.py --list-models
 python runners\check_artifact.py
 ```
 
-### ⚡ Running Live Evaluations
+### Execution of Live Evaluations
 
-Copy the example environment file and add your API keys:
+1. Configure API keys in a `.env` file (see `.env.example`).
+2. Run evaluations for a specific model:
 
 ```bash
-cp .env.example .env
-# Run a specific model
 python runners\run_unified.py --all --model gemini-2.5-pro
 ```
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```text
 C2CAD-Bench/
-├── probe/          # Core package and schema helpers
-├── runners/        # Benchmark runner & scoring utilities
-├── stages/         # Golden-reference generators by phase
-├── results/        # Generated figures and result database
-├── ui/             # WebGL visualizer and static dashboard
+├── probe/          # Core schema and validation logic
+├── runners/        # Benchmark execution and scoring utilities
+├── stages/         # Parametric golden-reference generators
+├── results/        # Analysis figures and evaluation database
+├── ui/             # WebGL visualizer and result dashboard
 ├── SCORING_RULES.md
 └── requirements.txt
 ```
 
 ---
 
-## ⚖️ License
+## License
 
-Released under the **MIT License**. For anonymous review artifacts, please respect the metadata constraints specified in the paper.
+C2CAD-Bench is released under the **MIT License**. For anonymous review purposes, please adhere to the metadata guidelines specified in the paper.

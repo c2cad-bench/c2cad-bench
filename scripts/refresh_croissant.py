@@ -15,7 +15,10 @@ RAW_PREFIX = "https://raw.githubusercontent.com/c2cad-bench/c2cad-bench/main/"
 
 
 def md5(path: Path) -> str:
-    return hashlib.md5(path.read_bytes()).hexdigest()
+    data = path.read_bytes()
+    if path.suffix.lower() not in {".png", ".pdf", ".zip"}:
+        data = data.replace(b"\r\n", b"\n")
+    return hashlib.md5(data).hexdigest()
 
 
 def main() -> int:

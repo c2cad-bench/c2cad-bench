@@ -56,7 +56,11 @@ def phase_table() -> str:
 
 
 def main() -> int:
-    OUT.write_text(model_rankings() + "\n\n" + phase_table() + "\n", encoding="utf-8")
+    OUT.write_text(
+        model_rankings() + "\n\n" + phase_table() + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
     print(f"Wrote {OUT}")
     return 0
 

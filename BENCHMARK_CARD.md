@@ -48,7 +48,7 @@ Semantic and global scores are gated by coverage and geometry to prevent random 
 
 - The current v1.0 released prompts are the exact evaluated prompts. Some include explicit counts, vectors, axes, or formula-like construction hints. The repository includes `scripts/audit_prompts.py` and `data/prompt_audit.csv` to make these scaffolding signals visible.
 - The benchmark uses a finite primitive vocabulary. Freeform surfaces, sketches, feature trees, chamfers, fillets, and constraint-solver workflows are outside scope.
-- Commercial model APIs can change over time. Use the released raw outputs and `results/run_manifest_neurips2026.json` for the paper snapshot once available.
+- Commercial model APIs can change over time. Use the released raw outputs and `results/run_manifest_neurips2026.json` for the fixed paper snapshot.
 - The WebGL viewer is for qualitative inspection only; scores are computed arithmetically.
 
 ## Responsible Reporting

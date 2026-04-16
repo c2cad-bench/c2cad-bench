@@ -251,7 +251,7 @@ def call_llm(prompt: str, model: str = "gemini", timeout: int = 180,
                     "parts": [{"text": "You are a 3D geometry JSON generator. Output ONLY a raw JSON array of shape objects. No markdown, no explanation, no commentary. Your entire response must start with '[' and end with ']'."}]
                 },
                 "generationConfig": {
-                    "temperature": 0.2,
+                    "temperature": 0.0,
                     # Hard cap: Gemini 2.5 supports up to 65536 output tokens.
                     # Use requested amount but never exceed 65536.
                     "maxOutputTokens": min(max_tokens or 32768, 65536),
@@ -281,7 +281,7 @@ def call_llm(prompt: str, model: str = "gemini", timeout: int = 180,
                 payload = json.dumps({
                     "model": canonical,
                     "max_tokens": _claude_tok,
-                    "temperature": 0.2,
+                    "temperature": 0.0,
                     "system": "You are a JSON-only generator. Output ONLY a raw JSON array. RULES: 1) Start with '[', end with ']'. 2) No markdown fences. 3) No explanation, no commentary, no preamble, no postamble. 4) Coordinates as [x,y,z] arrays only. 5) Minimal whitespace. 6) Be maximally concise.",
                     "messages": [{"role": "user", "content": prompt}]
                 })
@@ -363,7 +363,7 @@ def call_llm(prompt: str, model: str = "gemini", timeout: int = 180,
                             {"role": "user", "content": prompt}
                         ],
                         "max_completion_tokens": _gpt_tok,
-                        "temperature": 0.2,
+                        "temperature": 0.0,
                         "response_format": {"type": "json_object"}
                     }
                 else:
@@ -374,7 +374,7 @@ def call_llm(prompt: str, model: str = "gemini", timeout: int = 180,
                             {"role": "user", "content": prompt}
                         ],
                         "max_tokens": _gpt_tok,
-                        "temperature": 0.2,
+                        "temperature": 0.0,
                         "response_format": {"type": "json_object"}
                     }
 
@@ -408,7 +408,7 @@ def call_llm(prompt: str, model: str = "gemini", timeout: int = 180,
                     {"role": "user", "content": prompt}
                 ],
                 "max_tokens": ds_max,
-                "temperature": 0.2
+                "temperature": 0.0
             }
             # DeepSeek-chat supports json_object; reasoner does not
             if not is_reasoner:
@@ -436,7 +436,7 @@ def call_llm(prompt: str, model: str = "gemini", timeout: int = 180,
                     {"role": "user", "content": prompt}
                 ],
                 "max_tokens": min(max_tokens or 32768, 32768),
-                "temperature": 0.2,
+                "temperature": 0.0,
                 "response_format": {"type": "json_object"}
             })
             payload_file = CFG.PROBE_DIR / f"_temp_payload_{tid}.json"
@@ -461,7 +461,7 @@ def call_llm(prompt: str, model: str = "gemini", timeout: int = 180,
                     {"role": "user", "content": prompt}
                 ],
                 "max_tokens": 8192,
-                "temperature": 0.2
+                "temperature": 0.0
             })
             payload_file = CFG.PROBE_DIR / f"_temp_payload_{tid}.json"
             payload_file.write_text(payload, encoding="utf-8")
@@ -486,7 +486,7 @@ def call_llm(prompt: str, model: str = "gemini", timeout: int = 180,
                 ],
                 # Kimi K2.5 supports up to 32K output tokens.
                 "max_tokens": min(max_tokens or 32768, 32768),
-                "temperature": 0.6,
+                "temperature": 0.0,
                 "thinking": {"type": "disabled"}
             })
             payload_file = CFG.PROBE_DIR / f"_temp_payload_{tid}.json"

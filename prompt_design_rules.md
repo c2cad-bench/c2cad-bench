@@ -80,3 +80,22 @@ rather than leaking a coordinate.
 The deterministic Python generators compute the golden references from the same
 base parameters given to the model. The model never receives the generator code
 or golden coordinates during evaluation.
+
+## Release Audit
+
+The v1.0 artifact preserves the exact prompts used for the released model
+outputs. Some prompts contain explicit shape counts, coordinate vectors, axes, or
+formula-like construction hints. These are not silently edited after evaluation,
+because doing so would invalidate the released model scores.
+
+Run the audit below to inspect scaffolding signals:
+
+```bash
+python scripts/audit_prompts.py
+```
+
+For a future strict zero-scaffold split, use:
+
+```bash
+python scripts/audit_prompts.py --strict
+```

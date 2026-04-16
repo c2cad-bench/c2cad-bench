@@ -2632,8 +2632,7 @@ def _needed_tokens(n_shapes: int) -> int:
 def run_single_api(model, prompt, max_tokens: int = None):
     """Call an LLM with retry logic. Returns the raw text response."""
     cp = prompt + _JSON_SUFFIX
-    # Reasoning models (gpt-5.4-pro, deepseek-reasoner, o3) need longer timeouts
-    timeout = 360 if any(tag in model for tag in ("pro", "reasoner", "o3", "opus")) else 180
+    timeout = 300
     delay = 10
     for attempt in range(3):
         try:

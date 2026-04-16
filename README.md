@@ -4,6 +4,10 @@ C2CAD-Bench is a benchmark for evaluating 3D spatial reasoning in large language
 
 This repository contains the code and data artifact for the paper submission. The evaluated benchmark version contains 25 test families, 3 difficulty levels per family, 75 total test cases, and results for 13 LLMs.
 
+## Artifact Status
+
+The released data and raw model outputs are treated as immutable evidence for the paper snapshot. Repository checks therefore focus on reproducibility, metadata consistency, schema validity, and prompt-audit transparency rather than silently changing evaluated prompts or scores.
+
 ## What Is Included
 
 - Prompt definitions and deterministic golden-reference generators.
@@ -12,6 +16,9 @@ This repository contains the code and data artifact for the paper submission. Th
 - A WebGL viewer and static result database for inspecting outputs.
 - Raw model outputs and per-case scores in `results/showcase_db.js`.
 - Documentation for scoring and zero-scaffolding prompt design.
+- Benchmark and data cards: `BENCHMARK_CARD.md`, `DATA_CARD.md`.
+- Croissant metadata and validation scripts.
+- Prompt scaffolding audit in `data/prompt_audit.csv`.
 
 ## Benchmark Summary
 
@@ -50,9 +57,12 @@ python -m pip install -r requirements.txt
 These commands do not call any model API:
 
 ```bash
-python runners\run_unified.py --list-models
-python -m compileall -q probe runners stages
-python runners\check_artifact.py
+python runners/run_unified.py --list-models
+python -m compileall -q probe runners stages scripts tests
+python runners/check_artifact.py
+python scripts/validate_croissant.py
+python scripts/audit_prompts.py
+pytest -q
 ```
 
 Expected output:
@@ -61,6 +71,20 @@ Expected output:
 75 golden test cases
 13 models
 975 model-case results
+```
+
+## Prompt Audit
+
+The current v1.0 artifact contains the exact prompts used for the released model outputs. Some prompts include explicit shape counts, vectors, axes, or formula-like construction hints. These signals are audited rather than hidden:
+
+```bash
+python scripts/audit_prompts.py
+```
+
+The generated table is `data/prompt_audit.csv`. For future strict zero-scaffold prompt splits, use:
+
+```bash
+python scripts/audit_prompts.py --strict
 ```
 
 ## Running Live Evaluations
@@ -84,19 +108,19 @@ Required variables by provider:
 Run a single model:
 
 ```bash
-python runners\run_unified.py --all --model gemini-2.5-pro
+python runners/run_unified.py --all --model gemini-2.5-pro
 ```
 
 Run a single phase:
 
 ```bash
-python runners\run_unified.py --phase 1 --model gpt-4.1
+python runners/run_unified.py --phase 1 --model gpt-4.1
 ```
 
 Re-run failed or zero-score cases:
 
 ```bash
-python runners\run_unified.py --all --model claude-sonnet-4-6 --redo
+python runners/run_unified.py --all --model claude-sonnet-4-6 --redo
 ```
 
 ## Viewing Results
@@ -104,8 +128,8 @@ python runners\run_unified.py --all --model claude-sonnet-4-6 --redo
 Open the static dashboard and visualizer in a browser:
 
 ```bash
-ui\results.html
-ui\visualizer.html
+ui/results.html
+ui/visualizer.html
 ```
 
 On macOS/Linux:
@@ -123,13 +147,28 @@ C2CAD-Bench/
   runners/                  Benchmark runner, scoring utilities, database builders
   stages/                   Golden-reference generators by phase
   results/                  Result database and analysis figures
+  scripts/                  Artifact validation and reproduction helpers
+  tests/                    Lightweight integrity and scoring tests
+  docs/                     Schema, reproduction, limitations, extension docs
   ui/                       Static dashboard and 3D visualizer
+  BENCHMARK_CARD.md         Benchmark scope, intended use, caveats
+  DATA_CARD.md              Dataset contents and release notes
+  CITATION.cff              Citation metadata
   SCORING_RULES.md          Scoring methodology
   prompt_design_rules.md    Zero-scaffolding prompt design rules
+  croissant.json            Croissant metadata
   requirements.txt          Python dependencies
   .env.example              API-key template
   LICENSE                   Release license
 ```
+
+## Reproduction Docs
+
+- `docs/reproduce_paper.md`: offline checks and table regeneration.
+- `docs/schema.md`: canonical primitive schema and aliases.
+- `docs/add_new_family.md`: adding a deterministic test family.
+- `docs/known_limitations.md`: scope and caveats.
+- `docs/leaderboard.md`: result reporting guidance.
 
 ## License
 

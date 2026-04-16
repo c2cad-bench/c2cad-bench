@@ -93,7 +93,7 @@ For each golden shape, the best matching LLM shape is found in two passes:
 2. Pass 2 revisits golden shapes that had no same-type partner and assigns the nearest unused LLM shape of any type.
 3. Each LLM shape can be used at most once. Output order and LLM-provided IDs are ignored.
 
-This is not a global Hungarian assignment; it is the scorer implemented in `src_latest/runners/run_unified.py`. The type-first pass prevents a pool of wrong-type shapes from stealing same-type matches, while the fallback pass still records type-substitution errors.
+This is not a global Hungarian assignment; it is the scorer implemented in `runners/run_unified.py`. The type-first pass prevents a pool of wrong-type shapes from stealing same-type matches, while the fallback pass still records type-substitution errors.
 
 ### Per-Shape Geometry Score
 
